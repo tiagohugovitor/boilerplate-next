@@ -1,4 +1,5 @@
 {
   "editor.formatOnSave": false,
-  "jest.runMode":"on-demand"
+  "jest.runMode":"on-demand",
+  "files.eol": "\n"
 }

@@ -1,33 +1,39 @@
-// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
-import storybook from "eslint-plugin-storybook";
-
-import js from '@eslint/js'
-import globals from 'globals'
-import tseslint from 'typescript-eslint'
-import pluginReact from 'eslint-plugin-react'
+import js from "@eslint/js";
+import globals from "globals";
+import tseslint from "typescript-eslint";
 import configPrettier from "eslint-config-prettier";
-import { FlatCompat } from '@eslint/eslintrc'
-import path from 'path'
-import { fileURLToPath } from 'url'
+import storybook from "eslint-plugin-storybook";
+import nextVitals from "eslint-config-next/core-web-vitals";
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const eslintConfig = [
+  {
+    ignores: [".next/*", "node_modules/*", "dist/*", "storybook-static/*", "out/*", "coverage/*"],
+  },
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  ...nextVitals,
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname
-})
+  ...storybook.configs["flat/recommended"],
 
-export default [{
-  files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-  languageOptions: {
-    globals: { ...globals.browser, ...globals.node }
-  }
-}, js.configs.recommended, ...tseslint.configs.recommended, pluginReact.configs.flat.recommended, ...compat.extends('next/core-web-vitals'), configPrettier, {
-  rules: {
-    'react/react-in-jsx-scope': 'off',
-    'react-hooks/exhaustive-deps': 'warn',
-    'react-hooks/rules-of-hooks': 'error',
-    'react/prop-types': 'off',
-    '@typescript-eslint/explcit-module-boundary-types': 'off'
-  }
-}, ...storybook.configs["flat/recommended"]];
+  {
+    files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node
+      },
+    },
+    rules: {
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
+      "@typescript-eslint/explicit-module-boundary-types": "off",
+      "@typescript-eslint/no-explicit-any": "warn",
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+    },
+  },
+
+  configPrettier,
+];
+
+export default eslintConfig;
